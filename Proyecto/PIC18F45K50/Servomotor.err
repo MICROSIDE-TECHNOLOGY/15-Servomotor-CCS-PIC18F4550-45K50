@@ -1,0 +1,6 @@
+Compiling C:\Users\Martin Hdez\Desktop\18F45K50\Práctica 15 – Servomotor\Servomotor on 01-dic.-20 at 12:27
+>>> Warning 203 "C:\Users\Martin Hdez\Desktop\18F45K50\Práctica 15 – Servomotor\Servomotor.c" Line 42(1,1): Condition always TRUE
+>>> Warning 202 "C:\Users\Martin Hdez\Desktop\18F45K50\Práctica 15 – Servomotor\Servomotor.c" Line 17(7,11): Variable never used:   duty
+      Memory usage:   ROM=1%      RAM=1% - 2%
+      0 Errors,  2 Warnings.
+Build Successful.
