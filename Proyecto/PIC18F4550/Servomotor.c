@@ -1,7 +1,10 @@
-/*
-AUTOR: MICROSIDE TECHNOLOGY S.A. DE C.V.
-FECHA: JUNIO 2019
-*/
+/************************************************************************************************
+Company:
+Microside Technology Inc.
+Product Revision  :  1
+Device            :  X-TRAINER
+Driver Version    :  1.0
+************************************************************************************************/
 
 /*
 ---------------------------------------------------------------------------
@@ -18,17 +21,7 @@ int16 DUTY;                                     //variable para ajustar el valor
 int1 SUBE;
 int i;
 
-void SisInit()
-{
-  set_tris_c(0xFB);                                 // C2 salida
-  setup_timer_0(T0_INTERNAL|T0_DIV_4);
-  enable_interrupts(INT_TIMER0);
-  enable_interrupts(GLOBAL);
-
-}
-
 #int_TIMER0
-
  
 void TIMER0_isr(){
 output_high(PIN_C2);                              //Salida Pin_C2
@@ -39,7 +32,10 @@ set_timer0(5780);
 
 void main()
 {
-        SisInit();
+        set_tris_c(0xFB);                                 // C2 salida
+        setup_timer_0(T0_INTERNAL|T0_DIV_4);
+        enable_interrupts(INT_TIMER0);
+        enable_interrupts(GLOBAL);
         while(1)
               {
 
