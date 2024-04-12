@@ -1,6 +1,6 @@
-Compiling C:\Users\Martin Hdez\Desktop\18F4550\15 Servomotor\Servomotor on 01-dic.-20 at 12:27
->>> Warning 203 "C:\Users\Martin Hdez\Desktop\18F4550\15 Servomotor\Servomotor.c" Line 43(1,1): Condition always TRUE
->>> Warning 202 "C:\Users\Martin Hdez\Desktop\18F4550\15 Servomotor\Servomotor.c" Line 17(7,11): Variable never used:   duty
-      Memory usage:   ROM=1%      RAM=1% - 2%
+Compiling C:\Users\victo\OneDrive\Documentos\X-TRAINER-hands-on\CCS\PIC18F\15-Servomotor-CCS-PIC18F4550-45K50\Proyecto\PIC18F4550\Servomotor on 13-sep.-23 at 13:21
+>>> Warning 203 "C:\Users\victo\OneDrive\Documentos\X-TRAINER-hands-on\CCS\PIC18F\15-Servomotor-CCS-PIC18F4550-45K50\Proyecto\PIC18F4550\Servomotor.c" Line 27(1,1): Condition always TRUE
+>>> Warning 216 "C:\Users\victo\OneDrive\Documentos\X-TRAINER-hands-on\CCS\PIC18F\15-Servomotor-CCS-PIC18F4550-45K50\Proyecto\PIC18F4550\Servomotor.c" Line 39(1,2): Interrupts disabled during call to prevent re-entrancy:  (@WRITEBITA)
+      Memory usage:   ROM=8%      RAM=2% - 4%
       0 Errors,  2 Warnings.
 Build Successful.

@@ -1,7 +1,7 @@
 [PROJECT]
 Target=Servomotor.hex
 Processor_Text=PIC18F4550
-CCSVersion=5.090
+CCSVersion=5.115d
 Compiler=PCH
 [Target Data]
 FileList=Servomotor.c
@@ -11,18 +11,41 @@ Type=4
 1=Servomotor.c
 
 [defines]
-buildcount=2
+buildcount=5
 
 [Opened Files]
 1=Servomotor.c
 t1=1
-Count=1
-[Units]
-Count=1
-1=Servomotor (main)
+Count=2
+2=Servo.h
+t2=1
 
 [ProjectLog]
-Days=1
+Days=4
 D1=01-12-2020
 D1_L=1
 D1_L1=[44878]Project Closed.
+D2=01-09-2023
+D2_L=2
+D2_L1=[56852]Project Opened.
+D2_L2=[62025]Project Closed.
+D3=06-09-2023
+D3_L=2
+D3_L1=[43857]Project Opened.
+D3_L2=[45320]Project Closed.
+D4=13-09-2023
+D4_L=4
+D4_L1=[47349]Project Opened.
+D4_L2=[47916]Started Editing.
+D4_L3=[48242]Stopped Editing.
+TotalEdit=1
+TotalDebug=0
+D4_E=1
+D4_D=0
+D4_L4=[48399]Project Closed.
+
+[fileformats]
+forcecoff=0
+[Units]
+Count=1
+1=Servomotor (main)

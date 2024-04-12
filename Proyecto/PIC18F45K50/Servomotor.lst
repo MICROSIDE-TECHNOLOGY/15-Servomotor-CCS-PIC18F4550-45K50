@@ -1,16 +1,18 @@
-CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:27
+CCS PCH C Compiler, Version 5.115d, 1               14-sep.-23 11:46
+Compiler operating in Evaluation Mode
+To obtain a fully enabled compiler visit www.ccsinfo.com/products
 
-               Filename:   C:\Users\Martin Hdez\Desktop\18F45K50\Práctica 15 – Servomotor\Servomotor.lst
+               Filename:   C:\Users\victo\OneDrive\Documentos\X-TRAINER-hands-on\CCS\PIC18F\15-Servomotor-CCS-PIC18F4550-45K50\Proyecto\PIC18F45K50\Servomotor.lst
 
-               ROM used:   452 bytes (1%)
-                           Largest free fragment is 24120
-               RAM used:   30 (1%) at main() level
-                           31 (2%) worst case
-               Stack used: 1 locations (0 in main + 1 for interrupts)
+               ROM used:   2644 bytes (8%)
+                           Largest free fragment is 24402
+               RAM used:   42 (2%) at main() level
+                           76 (4%) worst case
+               Stack used: 4 locations (2 in main + 2 for interrupts)
                Stack size: 31
 
 *
-2000:  GOTO   211C
+2000:  GOTO   18DC
 *
 2008:  MOVWF  04
 200A:  MOVFF  FD8,05
@@ -32,10 +34,10 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:27
 2048:  MOVFF  01,0F
 204C:  MOVFF  02,10
 2050:  MOVFF  03,11
-2054:  BTFSS  FF2.5
+2054:  BTFSS  F9D.0
 2056:  GOTO   2060
-205A:  BTFSC  FF2.2
-205C:  GOTO   20AE
+205A:  BTFSC  F9E.0
+205C:  GOTO   103E
 2060:  MOVFF  0E,00
 2064:  MOVFF  0F,01
 2068:  MOVFF  10,02
@@ -57,21 +59,26 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:27
 20A4:  MOVFF  06,FE0
 20A8:  MOVFF  05,FD8
 20AC:  RETFIE 0
-.................... /*
-.................... AUTOR: MICROSIDE TECHNOLOGY S.A. DE C.V.
-.................... FECHA: JUNIO 2019
-.................... */
+.................... /************************************************************************************************
+.................... Company:
+.................... Microside Technology Inc.
+.................... File Name:
+.................... Servomotor.c
+.................... Product Revision  :  1
+.................... Device            :  X-TRAINER
+.................... Driver Version    :  1.0
+.................... ************************************************************************************************/
 .................... 
 .................... /*
 .................... ---------------------------------------------------------------------------
-.................... Controlar la posicíon de un servo por medio del módulo PWM interno
+.................... Controlar la posicíon de un servo por medio de una señal PWM
 .................... ---------------------------------------------------------------------------
 .................... */
 .................... 
 .................... #include <18F45K50.h>                    // Para PIC18F4550 cambiar por: #include <18F4550.h>
 .................... //////////// Standard Header file for the PIC18F45K50 device ////////////////
 .................... ///////////////////////////////////////////////////////////////////////////
-.................... ////        (C) Copyright 1996, 2014 Custom Computer Services          ////
+.................... ////        (C) Copyright 1996, 2020 Custom Computer Services          ////
 .................... //// This source code may only be used by licensed users of the CCS C  ////
 .................... //// compiler.  This source code may only be distributed to other      ////
 .................... //// licensed users of the CCS C compiler.  No other use, reproduction ////
@@ -80,219 +87,1298 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:27
 .................... //// form are not restricted in any way.                               ////
 .................... ///////////////////////////////////////////////////////////////////////////
 .................... #device PIC18F45K50
+*
+1000:  MOVF   48,W
+1002:  ANDLW  07
+1004:  MOVWF  00
+1006:  RRCF   48,W
+1008:  MOVWF  01
+100A:  RRCF   01,F
+100C:  RRCF   01,F
+100E:  MOVLW  1F
+1010:  ANDWF  01,F
+1012:  MOVF   01,W
+1014:  ADDWF  4A,W
+1016:  MOVWF  FE9
+1018:  MOVLW  00
+101A:  ADDWFC 4B,W
+101C:  MOVWF  FEA
+101E:  CLRF   01
+1020:  INCF   01,F
+1022:  INCF   00,F
+1024:  BRA    1028
+1026:  RLCF   01,F
+1028:  DECFSZ 00,F
+102A:  BRA    1026
+102C:  MOVF   49,F
+102E:  BZ    1036
+1030:  MOVF   01,W
+1032:  IORWF  FEF,F
+1034:  BRA    103C
+1036:  COMF   01,F
+1038:  MOVF   01,W
+103A:  ANDWF  FEF,F
+103C:  RETURN 0
+*
+114C:  MOVLW  8E
+114E:  MOVWF  00
+1150:  MOVFF  2F,01
+1154:  MOVFF  2E,02
+1158:  CLRF   03
+115A:  MOVF   01,F
+115C:  BNZ   1170
+115E:  MOVFF  02,01
+1162:  CLRF   02
+1164:  MOVLW  08
+1166:  SUBWF  00,F
+1168:  MOVF   01,F
+116A:  BNZ   1170
+116C:  CLRF   00
+116E:  BRA    1180
+1170:  BCF    FD8.0
+1172:  BTFSC  01.7
+1174:  BRA    117E
+1176:  RLCF   02,F
+1178:  RLCF   01,F
+117A:  DECF   00,F
+117C:  BRA    1170
+117E:  BCF    01.7
+1180:  GOTO   1896 (RETURN)
+1184:  MOVF   36,W
+1186:  BTFSC  FD8.2
+1188:  BRA    126C
+118A:  MOVWF  00
+118C:  MOVF   3A,W
+118E:  BTFSC  FD8.2
+1190:  BRA    126C
+1192:  ADDWF  00,F
+1194:  BNC   119E
+1196:  MOVLW  81
+1198:  ADDWF  00,F
+119A:  BC    126C
+119C:  BRA    11A6
+119E:  MOVLW  7F
+11A0:  SUBWF  00,F
+11A2:  BNC   126C
+11A4:  BZ    126C
+11A6:  MOVFF  37,3E
+11AA:  MOVF   3B,W
+11AC:  XORWF  3E,F
+11AE:  BSF    37.7
+11B0:  BSF    3B.7
+11B2:  MOVF   39,W
+11B4:  MULWF  3D
+11B6:  MOVFF  FF4,40
+11BA:  MOVF   38,W
+11BC:  MULWF  3C
+11BE:  MOVFF  FF4,03
+11C2:  MOVFF  FF3,3F
+11C6:  MULWF  3D
+11C8:  MOVF   FF3,W
+11CA:  ADDWF  40,F
+11CC:  MOVF   FF4,W
+11CE:  ADDWFC 3F,F
+11D0:  MOVLW  00
+11D2:  ADDWFC 03,F
+11D4:  MOVF   39,W
+11D6:  MULWF  3C
+11D8:  MOVF   FF3,W
+11DA:  ADDWF  40,F
+11DC:  MOVF   FF4,W
+11DE:  ADDWFC 3F,F
+11E0:  MOVLW  00
+11E2:  CLRF   02
+11E4:  ADDWFC 03,F
+11E6:  ADDWFC 02,F
+11E8:  MOVF   37,W
+11EA:  MULWF  3D
+11EC:  MOVF   FF3,W
+11EE:  ADDWF  3F,F
+11F0:  MOVF   FF4,W
+11F2:  ADDWFC 03,F
+11F4:  MOVLW  00
+11F6:  ADDWFC 02,F
+11F8:  MOVF   37,W
+11FA:  MULWF  3C
+11FC:  MOVF   FF3,W
+11FE:  ADDWF  03,F
+1200:  MOVF   FF4,W
+1202:  ADDWFC 02,F
+1204:  MOVLW  00
+1206:  CLRF   01
+1208:  ADDWFC 01,F
+120A:  MOVF   39,W
+120C:  MULWF  3B
+120E:  MOVF   FF3,W
+1210:  ADDWF  3F,F
+1212:  MOVF   FF4,W
+1214:  ADDWFC 03,F
+1216:  MOVLW  00
+1218:  ADDWFC 02,F
+121A:  ADDWFC 01,F
+121C:  MOVF   38,W
+121E:  MULWF  3B
+1220:  MOVF   FF3,W
+1222:  ADDWF  03,F
+1224:  MOVF   FF4,W
+1226:  ADDWFC 02,F
+1228:  MOVLW  00
+122A:  ADDWFC 01,F
+122C:  MOVF   37,W
+122E:  MULWF  3B
+1230:  MOVF   FF3,W
+1232:  ADDWF  02,F
+1234:  MOVF   FF4,W
+1236:  ADDWFC 01,F
+1238:  INCF   00,F
+123A:  BTFSC  01.7
+123C:  BRA    1248
+123E:  RLCF   3F,F
+1240:  RLCF   03,F
+1242:  RLCF   02,F
+1244:  RLCF   01,F
+1246:  DECF   00,F
+1248:  MOVLW  00
+124A:  BTFSS  3F.7
+124C:  BRA    1262
+124E:  INCF   03,F
+1250:  ADDWFC 02,F
+1252:  ADDWFC 01,F
+1254:  MOVF   01,W
+1256:  BNZ   1262
+1258:  MOVF   02,W
+125A:  BNZ   1262
+125C:  MOVF   03,W
+125E:  BNZ   1262
+1260:  INCF   00,F
+1262:  BTFSC  3E.7
+1264:  BSF    01.7
+1266:  BTFSS  3E.7
+1268:  BCF    01.7
+126A:  BRA    1274
+126C:  CLRF   00
+126E:  CLRF   01
+1270:  CLRF   02
+1272:  CLRF   03
+1274:  RETURN 0
+1276:  MOVFF  37,3E
+127A:  MOVF   3B,W
+127C:  XORWF  3E,F
+127E:  BTFSS  3E.7
+1280:  BRA    128C
+1282:  BCF    FD8.2
+1284:  BCF    FD8.0
+1286:  BTFSC  37.7
+1288:  BSF    FD8.0
+128A:  BRA    12EA
+128C:  MOVFF  37,3E
+1290:  MOVFF  3A,3F
+1294:  MOVF   36,W
+1296:  SUBWF  3F,F
+1298:  BZ    12A6
+129A:  BTFSS  3E.7
+129C:  BRA    12EA
+129E:  MOVF   FD8,W
+12A0:  XORLW  01
+12A2:  MOVWF  FD8
+12A4:  BRA    12EA
+12A6:  MOVFF  3B,3F
+12AA:  MOVF   37,W
+12AC:  SUBWF  3F,F
+12AE:  BZ    12BC
+12B0:  BTFSS  3E.7
+12B2:  BRA    12EA
+12B4:  MOVF   FD8,W
+12B6:  XORLW  01
+12B8:  MOVWF  FD8
+12BA:  BRA    12EA
+12BC:  MOVFF  3C,3F
+12C0:  MOVF   38,W
+12C2:  SUBWF  3F,F
+12C4:  BZ    12D2
+12C6:  BTFSS  3E.7
+12C8:  BRA    12EA
+12CA:  MOVF   FD8,W
+12CC:  XORLW  01
+12CE:  MOVWF  FD8
+12D0:  BRA    12EA
+12D2:  MOVFF  3D,3F
+12D6:  MOVF   39,W
+12D8:  SUBWF  3F,F
+12DA:  BZ    12E8
+12DC:  BTFSS  3E.7
+12DE:  BRA    12EA
+12E0:  MOVF   FD8,W
+12E2:  XORLW  01
+12E4:  MOVWF  FD8
+12E6:  BRA    12EA
+12E8:  BCF    FD8.0
+12EA:  RETURN 0
+12EC:  MOVF   3A,W
+12EE:  BTFSC  FD8.2
+12F0:  BRA    143C
+12F2:  MOVWF  46
+12F4:  MOVF   3E,W
+12F6:  BTFSC  FD8.2
+12F8:  BRA    143C
+12FA:  SUBWF  46,F
+12FC:  BNC   1308
+12FE:  MOVLW  7F
+1300:  ADDWF  46,F
+1302:  BTFSC  FD8.0
+1304:  BRA    143C
+1306:  BRA    1314
+1308:  MOVLW  81
+130A:  SUBWF  46,F
+130C:  BTFSS  FD8.0
+130E:  BRA    143C
+1310:  BTFSC  FD8.2
+1312:  BRA    143C
+1314:  MOVFF  46,00
+1318:  CLRF   01
+131A:  CLRF   02
+131C:  CLRF   03
+131E:  CLRF   45
+1320:  MOVFF  3B,44
+1324:  BSF    44.7
+1326:  MOVFF  3C,43
+132A:  MOVFF  3D,42
+132E:  MOVLW  19
+1330:  MOVWF  46
+1332:  MOVF   41,W
+1334:  SUBWF  42,F
+1336:  BC    1352
+1338:  MOVLW  01
+133A:  SUBWF  43,F
+133C:  BC    1352
+133E:  SUBWF  44,F
+1340:  BC    1352
+1342:  SUBWF  45,F
+1344:  BC    1352
+1346:  INCF   45,F
+1348:  INCF   44,F
+134A:  INCF   43,F
+134C:  MOVF   41,W
+134E:  ADDWF  42,F
+1350:  BRA    13A2
+1352:  MOVF   40,W
+1354:  SUBWF  43,F
+1356:  BC    137C
+1358:  MOVLW  01
+135A:  SUBWF  44,F
+135C:  BC    137C
+135E:  SUBWF  45,F
+1360:  BC    137C
+1362:  INCF   45,F
+1364:  INCF   44,F
+1366:  MOVF   40,W
+1368:  ADDWF  43,F
+136A:  MOVF   41,W
+136C:  ADDWF  42,F
+136E:  BNC   13A2
+1370:  INCF   43,F
+1372:  BNZ   13A2
+1374:  INCF   44,F
+1376:  BNZ   13A2
+1378:  INCF   45,F
+137A:  BRA    13A2
+137C:  MOVF   3F,W
+137E:  IORLW  80
+1380:  SUBWF  44,F
+1382:  BC    13A0
+1384:  MOVLW  01
+1386:  SUBWF  45,F
+1388:  BC    13A0
+138A:  INCF   45,F
+138C:  MOVF   3F,W
+138E:  IORLW  80
+1390:  ADDWF  44,F
+1392:  MOVF   40,W
+1394:  ADDWF  43,F
+1396:  BNC   136A
+1398:  INCF   44,F
+139A:  BNZ   136A
+139C:  INCF   45,F
+139E:  BRA    136A
+13A0:  BSF    03.0
+13A2:  DECFSZ 46,F
+13A4:  BRA    13A8
+13A6:  BRA    13BE
+13A8:  BCF    FD8.0
+13AA:  RLCF   42,F
+13AC:  RLCF   43,F
+13AE:  RLCF   44,F
+13B0:  RLCF   45,F
+13B2:  BCF    FD8.0
+13B4:  RLCF   03,F
+13B6:  RLCF   02,F
+13B8:  RLCF   01,F
+13BA:  RLCF   47,F
+13BC:  BRA    1332
+13BE:  BTFSS  47.0
+13C0:  BRA    13CE
+13C2:  BCF    FD8.0
+13C4:  RRCF   01,F
+13C6:  RRCF   02,F
+13C8:  RRCF   03,F
+13CA:  RRCF   47,F
+13CC:  BRA    13D2
+13CE:  DECF   00,F
+13D0:  BZ    143C
+13D2:  BTFSC  47.7
+13D4:  BRA    1412
+13D6:  BCF    FD8.0
+13D8:  RLCF   42,F
+13DA:  RLCF   43,F
+13DC:  RLCF   44,F
+13DE:  RLCF   45,F
+13E0:  MOVF   41,W
+13E2:  SUBWF  42,F
+13E4:  BC    13F4
+13E6:  MOVLW  01
+13E8:  SUBWF  43,F
+13EA:  BC    13F4
+13EC:  SUBWF  44,F
+13EE:  BC    13F4
+13F0:  SUBWF  45,F
+13F2:  BNC   1428
+13F4:  MOVF   40,W
+13F6:  SUBWF  43,F
+13F8:  BC    1404
+13FA:  MOVLW  01
+13FC:  SUBWF  44,F
+13FE:  BC    1404
+1400:  SUBWF  45,F
+1402:  BNC   1428
+1404:  MOVF   3F,W
+1406:  IORLW  80
+1408:  SUBWF  44,F
+140A:  BC    1412
+140C:  MOVLW  01
+140E:  SUBWF  45,F
+1410:  BNC   1428
+1412:  INCF   03,F
+1414:  BNZ   1428
+1416:  INCF   02,F
+1418:  BNZ   1428
+141A:  INCF   01,F
+141C:  BNZ   1428
+141E:  INCF   00,F
+1420:  BZ    143C
+1422:  RRCF   01,F
+1424:  RRCF   02,F
+1426:  RRCF   03,F
+1428:  MOVFF  3B,46
+142C:  MOVF   3F,W
+142E:  XORWF  46,F
+1430:  BTFSS  46.7
+1432:  BRA    1438
+1434:  BSF    01.7
+1436:  BRA    1444
+1438:  BCF    01.7
+143A:  BRA    1444
+143C:  CLRF   00
+143E:  CLRF   01
+1440:  CLRF   02
+1442:  CLRF   03
+1444:  RETURN 0
+1446:  MOVLW  80
+1448:  BTFSC  FD8.1
+144A:  XORWF  3B,F
+144C:  CLRF   40
+144E:  CLRF   41
+1450:  MOVFF  37,3F
+1454:  MOVF   3B,W
+1456:  XORWF  3F,F
+1458:  MOVF   36,W
+145A:  BTFSC  FD8.2
+145C:  BRA    1616
+145E:  MOVWF  3E
+1460:  MOVWF  00
+1462:  MOVF   3A,W
+1464:  BTFSC  FD8.2
+1466:  BRA    1628
+1468:  SUBWF  3E,F
+146A:  BTFSC  FD8.2
+146C:  BRA    1570
+146E:  BNC   14EA
+1470:  MOVFF  3B,44
+1474:  BSF    44.7
+1476:  MOVFF  3C,43
+147A:  MOVFF  3D,42
+147E:  CLRF   41
+1480:  BCF    FD8.0
+1482:  RRCF   44,F
+1484:  RRCF   43,F
+1486:  RRCF   42,F
+1488:  RRCF   41,F
+148A:  DECFSZ 3E,F
+148C:  BRA    147E
+148E:  BTFSS  3F.7
+1490:  BRA    1498
+1492:  BSF    40.0
+1494:  BRA    1650
+1496:  BCF    40.0
+1498:  BCF    3E.0
+149A:  BSF    40.4
+149C:  CLRF   FEA
+149E:  MOVLW  39
+14A0:  MOVWF  FE9
+14A2:  BRA    1676
+14A4:  BCF    40.4
+14A6:  BTFSC  3F.7
+14A8:  BRA    14BE
+14AA:  BTFSS  3E.0
+14AC:  BRA    14D4
+14AE:  RRCF   44,F
+14B0:  RRCF   43,F
+14B2:  RRCF   42,F
+14B4:  RRCF   41,F
+14B6:  INCF   00,F
+14B8:  BTFSC  FD8.2
+14BA:  BRA    1646
+14BC:  BRA    14D4
+14BE:  BTFSC  44.7
+14C0:  BRA    14DA
+14C2:  BCF    FD8.0
+14C4:  RLCF   41,F
+14C6:  RLCF   42,F
+14C8:  RLCF   43,F
+14CA:  RLCF   44,F
+14CC:  DECF   00,F
+14CE:  BTFSC  FD8.2
+14D0:  BRA    1646
+14D2:  BRA    14BE
+14D4:  BSF    40.6
+14D6:  BRA    15AE
+14D8:  BCF    40.6
+14DA:  MOVFF  37,3F
+14DE:  BTFSS  37.7
+14E0:  BRA    14E6
+14E2:  BSF    44.7
+14E4:  BRA    1638
+14E6:  BCF    44.7
+14E8:  BRA    1638
+14EA:  MOVFF  3A,3E
+14EE:  MOVFF  3A,00
+14F2:  MOVF   36,W
+14F4:  SUBWF  3E,F
+14F6:  MOVFF  37,44
+14FA:  BSF    44.7
+14FC:  MOVFF  38,43
+1500:  MOVFF  39,42
+1504:  CLRF   41
+1506:  BCF    FD8.0
+1508:  RRCF   44,F
+150A:  RRCF   43,F
+150C:  RRCF   42,F
+150E:  RRCF   41,F
+1510:  DECFSZ 3E,F
+1512:  BRA    1504
+1514:  BTFSS  3F.7
+1516:  BRA    151E
+1518:  BSF    40.1
+151A:  BRA    1650
+151C:  BCF    40.1
+151E:  BCF    3E.0
+1520:  BSF    40.5
+1522:  CLRF   FEA
+1524:  MOVLW  3D
+1526:  MOVWF  FE9
+1528:  BRA    1676
+152A:  BCF    40.5
+152C:  BTFSC  3F.7
+152E:  BRA    1544
+1530:  BTFSS  3E.0
+1532:  BRA    155A
+1534:  RRCF   44,F
+1536:  RRCF   43,F
+1538:  RRCF   42,F
+153A:  RRCF   41,F
+153C:  INCF   00,F
+153E:  BTFSC  FD8.2
+1540:  BRA    1646
+1542:  BRA    155A
+1544:  BTFSC  44.7
+1546:  BRA    1560
+1548:  BCF    FD8.0
+154A:  RLCF   41,F
+154C:  RLCF   42,F
+154E:  RLCF   43,F
+1550:  RLCF   44,F
+1552:  DECF   00,F
+1554:  BTFSC  FD8.2
+1556:  BRA    1646
+1558:  BRA    1544
+155A:  BSF    40.7
+155C:  BRA    15AE
+155E:  BCF    40.7
+1560:  MOVFF  3B,3F
+1564:  BTFSS  3B.7
+1566:  BRA    156C
+1568:  BSF    44.7
+156A:  BRA    1638
+156C:  BCF    44.7
+156E:  BRA    1638
+1570:  MOVFF  3B,44
+1574:  BSF    44.7
+1576:  MOVFF  3C,43
+157A:  MOVFF  3D,42
+157E:  BTFSS  3F.7
+1580:  BRA    158A
+1582:  BCF    44.7
+1584:  BSF    40.2
+1586:  BRA    1650
+1588:  BCF    40.2
+158A:  CLRF   41
+158C:  BCF    3E.0
+158E:  CLRF   FEA
+1590:  MOVLW  39
+1592:  MOVWF  FE9
+1594:  BRA    1676
+1596:  BTFSC  3F.7
+1598:  BRA    15D2
+159A:  MOVFF  37,3F
+159E:  BTFSS  3E.0
+15A0:  BRA    15AE
+15A2:  RRCF   44,F
+15A4:  RRCF   43,F
+15A6:  RRCF   42,F
+15A8:  RRCF   41,F
+15AA:  INCF   00,F
+15AC:  BZ    1646
+15AE:  BTFSS  41.7
+15B0:  BRA    15C8
+15B2:  INCF   42,F
+15B4:  BNZ   15C8
+15B6:  INCF   43,F
+15B8:  BNZ   15C8
+15BA:  INCF   44,F
+15BC:  BNZ   15C8
+15BE:  RRCF   44,F
+15C0:  RRCF   43,F
+15C2:  RRCF   42,F
+15C4:  INCF   00,F
+15C6:  BZ    1646
+15C8:  BTFSC  40.6
+15CA:  BRA    14D8
+15CC:  BTFSC  40.7
+15CE:  BRA    155E
+15D0:  BRA    160A
+15D2:  MOVLW  80
+15D4:  XORWF  44,F
+15D6:  BTFSS  44.7
+15D8:  BRA    15E2
+15DA:  BRA    1650
+15DC:  MOVFF  3B,3F
+15E0:  BRA    15F6
+15E2:  MOVFF  37,3F
+15E6:  MOVF   44,F
+15E8:  BNZ   15F6
+15EA:  MOVF   43,F
+15EC:  BNZ   15F6
+15EE:  MOVF   42,F
+15F0:  BNZ   15F6
+15F2:  CLRF   00
+15F4:  BRA    1638
+15F6:  BTFSC  44.7
+15F8:  BRA    160A
+15FA:  BCF    FD8.0
+15FC:  RLCF   41,F
+15FE:  RLCF   42,F
+1600:  RLCF   43,F
+1602:  RLCF   44,F
+1604:  DECFSZ 00,F
+1606:  BRA    15F6
+1608:  BRA    1646
+160A:  BTFSS  3F.7
+160C:  BRA    1612
+160E:  BSF    44.7
+1610:  BRA    1638
+1612:  BCF    44.7
+1614:  BRA    1638
+1616:  MOVFF  3A,00
+161A:  MOVFF  3B,44
+161E:  MOVFF  3C,43
+1622:  MOVFF  3D,42
+1626:  BRA    1638
+1628:  MOVFF  36,00
+162C:  MOVFF  37,44
+1630:  MOVFF  38,43
+1634:  MOVFF  39,42
+1638:  MOVFF  44,01
+163C:  MOVFF  43,02
+1640:  MOVFF  42,03
+1644:  BRA    16AE
+1646:  CLRF   00
+1648:  CLRF   01
+164A:  CLRF   02
+164C:  CLRF   03
+164E:  BRA    16AE
+1650:  CLRF   41
+1652:  COMF   42,F
+1654:  COMF   43,F
+1656:  COMF   44,F
+1658:  COMF   41,F
+165A:  INCF   41,F
+165C:  BNZ   1668
+165E:  INCF   42,F
+1660:  BNZ   1668
+1662:  INCF   43,F
+1664:  BNZ   1668
+1666:  INCF   44,F
+1668:  BTFSC  40.0
+166A:  BRA    1496
+166C:  BTFSC  40.1
+166E:  BRA    151C
+1670:  BTFSC  40.2
+1672:  BRA    1588
+1674:  BRA    15DC
+1676:  MOVF   FEF,W
+1678:  ADDWF  42,F
+167A:  BNC   1686
+167C:  INCF   43,F
+167E:  BNZ   1686
+1680:  INCF   44,F
+1682:  BTFSC  FD8.2
+1684:  BSF    3E.0
+1686:  MOVF   FED,F
+1688:  MOVF   FEF,W
+168A:  ADDWF  43,F
+168C:  BNC   1694
+168E:  INCF   44,F
+1690:  BTFSC  FD8.2
+1692:  BSF    3E.0
+1694:  MOVF   FED,F
+1696:  MOVF   FEF,W
+1698:  BTFSC  FEF.7
+169A:  BRA    169E
+169C:  XORLW  80
+169E:  ADDWF  44,F
+16A0:  BTFSC  FD8.0
+16A2:  BSF    3E.0
+16A4:  BTFSC  40.4
+16A6:  BRA    14A4
+16A8:  BTFSC  40.5
+16AA:  BRA    152A
+16AC:  BRA    1596
+16AE:  RETURN 0
+16B0:  MOVLW  8E
+16B2:  MOVWF  00
+16B4:  MOVF   36,W
+16B6:  SUBWF  00,F
+16B8:  MOVFF  37,02
+16BC:  MOVFF  38,01
+16C0:  BSF    02.7
+16C2:  MOVF   00,F
+16C4:  BZ    16D8
+16C6:  BCF    FD8.0
+16C8:  MOVF   02,F
+16CA:  BNZ   16D0
+16CC:  MOVF   01,F
+16CE:  BZ    16D8
+16D0:  RRCF   02,F
+16D2:  RRCF   01,F
+16D4:  DECFSZ 00,F
+16D6:  BRA    16C6
+16D8:  BTFSS  37.7
+16DA:  BRA    16E6
+16DC:  COMF   01,F
+16DE:  COMF   02,F
+16E0:  INCF   01,F
+16E2:  BTFSC  FD8.2
+16E4:  INCF   02,F
+16E6:  RETURN 0
 .................... 
 .................... #list
 .................... 
+.................... #include "Servo.h"                       // Librería para controlar 1 servo (Utiliza Timer1)
+.................... /************************************************************************************************
+.................... Company:
+.................... Microside Technology Inc.
+.................... File Name:
+.................... Servo.c
+.................... Product Revision  :  1
+.................... Driver Version    :  0.9beta1
+.................... 
+.................... Disclaimer:
+.................... ** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+.................... ** OF MERCHANTABILITY, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+.................... ** TO THE WARRANTIES FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+.................... ** IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM,
+.................... ** DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+.................... ** OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+.................... ** OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+.................... ************************************************************************************************/
+.................... 
+.................... /*!
+....................  * @file  Servo.h
+....................  * @brief Small Servo library using Timer1 interruption technique.
+....................           For testing purposes only DO NOT USE on producion.
+....................  */
+....................  
+.................... // TODO: This library throws a warning for a possible race condition, fix by 
+.................... //       initial release
+.................... 
+.................... #ifndef _SERVO_H_
+.................... #define _SERVO_H_
+.................... 
+.................... // -------------------------------------------------------------- PUBLIC MACROS
+.................... 
+.................... // If needed to be used with a different FOSC, define this value to the
+.................... // appropiate frequency in Hertz.
+.................... #ifndef SERVO_FOSC
+.................... #define SERVO_FOSC 48000000
+.................... #endif
+.................... 
+.................... // Hobby servos work by measuring the duty cycle from 1ms to 2ms, then adjusting
+.................... // the position proportionately from 0 to 180, however most of them have different
+.................... // offsets, calibrate the following values to match your servo position 
+.................... 
+.................... // Seconds that generate a 0° turn
+.................... #ifndef SERVO_MIN_POS
+.................... #define SERVO_MIN_POS 0.0004
+.................... #endif
+.................... 
+.................... // Seconds that generate a 180° turn
+.................... #ifndef SERVO_MAX_POS
+.................... #define SERVO_MAX_POS 0.0027
+.................... #endif
+.................... 
+.................... // Interval between 0° and 180° turn in seconds
+.................... #define SERVO_DUTY_CYCLE_POS (SERVO_MAX_POS - SERVO_MIN_POS)
+.................... 
+.................... // Time needed to complement a 50Hz
+.................... #define SERVO_FREQ_COMPLEMENT 0.02 - SERVO_MAX_POS
+.................... 
+.................... // Timer1 preescaler used, bigger values reduce control accuracy, values too
+.................... // small might result in errors.
+.................... #ifndef SERVO_T_PREESCALER
+.................... #define SERVO_T_PREESCALER 2
+.................... #endif
+.................... 
+.................... // Values for Timer1 interruption 
+.................... #define SERVO_MIN_POS_T1_VALUE (unsigned int16)(65535 - ( (SERVO_FOSC * SERVO_MIN_POS)/(4 * SERVO_T_PREESCALER) ))
+.................... 
+.................... #define SERVO_FREQ_COMPLEMENT_VALUE (unsigned int16)(65535 - ( (SERVO_FOSC * SERVO_FREQ_COMPLEMENT)/(4 * SERVO_T_PREESCALER) ))
+.................... 
+.................... #define SERVO_MAX_COMPLEMENT (unsigned int16)(65535 - ( ( SERVO_FOSC * ( SERVO_DUTY_CYCLE_POS ) ) / (4 * SERVO_T_PREESCALER) ) )
+.................... 
+.................... // ------------------------------------------------------------------ VARIABLES
+.................... 
+.................... // Counter used to keep track of the pin level and the preloaded value for Timer1
+.................... unsigned int8 __servo_array_pointer = 0;
+.................... 
+.................... // Signal generation array and pin status
+.................... // TODO: implement multiple server control, it should be doable to control up to 16 servos
+.................... // using only Timer1, rewriting this section might also reduce memory consumtion
+.................... unsigned int16 __servoSignal[4] = { SERVO_MIN_POS_T1_VALUE, 65535, SERVO_MAX_COMPLEMENT, SERVO_FREQ_COMPLEMENT_VALUE };
+.................... unsigned int8  __onOffMap[4] = {1,1,0,0};
+.................... 
+.................... // Output pin
+.................... int16 __servo_pin = -1;
+.................... 
+.................... // ----------------------------------------------- PUBLIC FUNCTION DECLARATIONS
+.................... 
+.................... /**
+....................  * @brief Interrupt handler.
+....................  * 
+....................  * @description This function preload Timer1 next value and changes the output
+....................  *              pin
+....................  */
+.................... #int_timer1
+.................... void TIMER1_isr() {
+....................    __servo_array_pointer++;
+*
+103E:  INCF   1A,F
+....................    if(__servo_array_pointer > 3) __servo_array_pointer = 0;
+1040:  MOVF   1A,W
+1042:  SUBLW  03
+1044:  BC    1048
+1046:  CLRF   1A
+....................    setup_timer_1 ( T1_DISABLED );
+1048:  CLRF   FCD
+104A:  CLRF   FCC
+....................    set_timer1( __servoSignal[__servo_array_pointer] );
+104C:  BCF    FD8.0
+104E:  RLCF   1A,W
+1050:  CLRF   03
+1052:  ADDLW  1B
+1054:  MOVWF  FE9
+1056:  MOVLW  00
+1058:  ADDWFC 03,W
+105A:  MOVWF  FEA
+105C:  MOVFF  FEC,FCF
+1060:  MOVF   FED,F
+1062:  MOVFF  FEF,FCE
+1066:  NOP   
+....................    if ( __onOffMap[__servo_array_pointer] == 1 )
+1068:  CLRF   03
+106A:  MOVF   1A,W
+106C:  ADDLW  23
+106E:  MOVWF  FE9
+1070:  MOVLW  00
+1072:  ADDWFC 03,W
+1074:  MOVWF  FEA
+1076:  DECFSZ FEF,W
+1078:  BRA    109E
+....................       output_high(__servo_pin);
+107A:  MOVFF  27,48
+107E:  MOVLW  01
+1080:  MOVWF  49
+1082:  MOVLW  0F
+1084:  MOVWF  4B
+1086:  MOVLW  89
+1088:  MOVWF  4A
+108A:  RCALL  1000
+108C:  MOVFF  27,48
+1090:  CLRF   49
+1092:  MOVLW  0F
+1094:  MOVWF  4B
+1096:  MOVLW  92
+1098:  MOVWF  4A
+109A:  RCALL  1000
+109C:  BRA    10BE
+....................     else
+....................       output_low(__servo_pin);
+109E:  MOVFF  27,48
+10A2:  CLRF   49
+10A4:  MOVLW  0F
+10A6:  MOVWF  4B
+10A8:  MOVLW  89
+10AA:  MOVWF  4A
+10AC:  RCALL  1000
+10AE:  MOVFF  27,48
+10B2:  CLRF   49
+10B4:  MOVLW  0F
+10B6:  MOVWF  4B
+10B8:  MOVLW  92
+10BA:  MOVWF  4A
+10BC:  RCALL  1000
+....................     setup_timer_1 ( T1_INTERNAL | T1_DIV_BY_2 );
+10BE:  MOVLW  17
+10C0:  MOVWF  FCD
+10C2:  CLRF   FCC
+10C4:  BCF    F9E.0
+10C6:  GOTO   2060
+.................... }
+.................... 
+.................... /**
+....................  * @brief Servo signal setup.
+....................  * 
+....................  * @param Output pin
+....................  *
+....................  * @description This function sets Timer1, Global interruptions and the output
+....................  *              pin
+....................  */
+.................... void setup_servo( int16 output_pin ) {
+....................    __servo_array_pointer = 0;
+10CA:  CLRF   1A
+....................    
+....................    set_timer1( 0 );
+10CC:  CLRF   FCF
+10CE:  CLRF   FCE
+10D0:  NOP   
+....................    
+....................    enable_interrupts( INT_TIMER1 );
+10D2:  BSF    F9D.0
+....................    enable_interrupts( GLOBAL );
+10D4:  MOVLW  C0
+10D6:  IORWF  FF2,F
+....................    
+....................    __servo_pin = output_pin;
+10D8:  MOVFF  2A,28
+10DC:  MOVFF  29,27
+10E0:  CLRF   19
+10E2:  BTFSC  FF2.7
+10E4:  BSF    19.7
+10E6:  BCF    FF2.7
+....................    
+....................    output_HIGH (__servo_pin);
+10E8:  MOVFF  27,48
+10EC:  MOVLW  01
+10EE:  MOVWF  49
+10F0:  MOVLW  0F
+10F2:  MOVWF  4B
+10F4:  MOVLW  89
+10F6:  MOVWF  4A
+10F8:  RCALL  1000
+10FA:  BTFSC  19.7
+10FC:  BSF    FF2.7
+10FE:  CLRF   19
+1100:  BTFSC  FF2.7
+1102:  BSF    19.7
+1104:  BCF    FF2.7
+1106:  MOVFF  27,48
+110A:  CLRF   49
+110C:  MOVLW  0F
+110E:  MOVWF  4B
+1110:  MOVLW  92
+1112:  MOVWF  4A
+1114:  RCALL  1000
+1116:  BTFSC  19.7
+1118:  BSF    FF2.7
+....................    
+....................    setup_timer_1 ( T1_INTERNAL | T1_DIV_BY_2 );
+111A:  MOVLW  17
+111C:  MOVWF  FCD
+111E:  CLRF   FCC
+1120:  GOTO   193A (RETURN)
+.................... }
+.................... 
+.................... /**
+....................  * @brief Sets control signal in seconds.
+....................  * 
+....................  * @param Seconds
+....................  *
+....................  * @description This function calculates Timer1 overflow value for the given
+....................  *              seconds, then loads this value on Timer1 overflow registers
+....................  */
+.................... void set_servo_ms( float seconds ) {
+....................    if( seconds > SERVO_DUTY_CYCLE_POS )
+*
+16E8:  MOVLW  99
+16EA:  MOVWF  39
+16EC:  MOVLW  BB
+16EE:  MOVWF  38
+16F0:  MOVLW  16
+16F2:  MOVWF  37
+16F4:  MOVLW  76
+16F6:  MOVWF  36
+16F8:  MOVFF  31,3D
+16FC:  MOVFF  30,3C
+1700:  MOVFF  2F,3B
+1704:  MOVFF  2E,3A
+1708:  RCALL  1276
+170A:  BNC   171C
+....................       seconds = SERVO_DUTY_CYCLE_POS;
+170C:  MOVLW  99
+170E:  MOVWF  31
+1710:  MOVLW  BB
+1712:  MOVWF  30
+1714:  MOVLW  16
+1716:  MOVWF  2F
+1718:  MOVLW  76
+171A:  MOVWF  2E
+....................    if( seconds < 0 )
+171C:  MOVFF  31,39
+1720:  MOVFF  30,38
+1724:  MOVFF  2F,37
+1728:  MOVFF  2E,36
+172C:  CLRF   3D
+172E:  CLRF   3C
+1730:  CLRF   3B
+1732:  CLRF   3A
+1734:  RCALL  1276
+1736:  BNC   1740
+....................       seconds = 0;
+1738:  CLRF   31
+173A:  CLRF   30
+173C:  CLRF   2F
+173E:  CLRF   2E
+....................    unsigned int16 starting_point = (unsigned int16)(65535 - ( (SERVO_FOSC * seconds)/(4 * SERVO_T_PREESCALER) ));
+....................    unsigned int16 complement = (unsigned int16)(65535 - ( (SERVO_FOSC * (SERVO_DUTY_CYCLE_POS - seconds))/(4 * SERVO_T_PREESCALER) ));
+1740:  CLRF   39
+1742:  MOVLW  1B
+1744:  MOVWF  38
+1746:  MOVLW  37
+1748:  MOVWF  37
+174A:  MOVLW  98
+174C:  MOVWF  36
+174E:  MOVFF  31,3D
+1752:  MOVFF  30,3C
+1756:  MOVFF  2F,3B
+175A:  MOVFF  2E,3A
+175E:  RCALL  1184
+1760:  MOVFF  03,39
+1764:  MOVFF  02,38
+1768:  MOVFF  01,37
+176C:  MOVFF  00,36
+1770:  MOVFF  03,3D
+1774:  MOVFF  02,3C
+1778:  MOVFF  01,3B
+177C:  MOVFF  00,3A
+1780:  CLRF   41
+1782:  CLRF   40
+1784:  CLRF   3F
+1786:  MOVLW  82
+1788:  MOVWF  3E
+178A:  RCALL  12EC
+178C:  BSF    FD8.1
+178E:  CLRF   39
+1790:  SETF   38
+1792:  MOVLW  7F
+1794:  MOVWF  37
+1796:  MOVLW  8E
+1798:  MOVWF  36
+179A:  MOVFF  03,3D
+179E:  MOVFF  02,3C
+17A2:  MOVFF  01,3B
+17A6:  MOVFF  00,3A
+17AA:  RCALL  1446
+17AC:  MOVFF  03,39
+17B0:  MOVFF  02,38
+17B4:  MOVFF  01,37
+17B8:  MOVFF  00,36
+17BC:  RCALL  16B0
+17BE:  MOVFF  02,33
+17C2:  MOVFF  01,32
+17C6:  BSF    FD8.1
+17C8:  MOVLW  99
+17CA:  MOVWF  39
+17CC:  MOVLW  BB
+17CE:  MOVWF  38
+17D0:  MOVLW  16
+17D2:  MOVWF  37
+17D4:  MOVLW  76
+17D6:  MOVWF  36
+17D8:  MOVFF  31,3D
+17DC:  MOVFF  30,3C
+17E0:  MOVFF  2F,3B
+17E4:  MOVFF  2E,3A
+17E8:  RCALL  1446
+17EA:  CLRF   39
+17EC:  MOVLW  1B
+17EE:  MOVWF  38
+17F0:  MOVLW  37
+17F2:  MOVWF  37
+17F4:  MOVLW  98
+17F6:  MOVWF  36
+17F8:  MOVFF  03,3D
+17FC:  MOVFF  02,3C
+1800:  MOVFF  01,3B
+1804:  MOVFF  00,3A
+1808:  RCALL  1184
+180A:  MOVFF  03,39
+180E:  MOVFF  02,38
+1812:  MOVFF  01,37
+1816:  MOVFF  00,36
+181A:  MOVFF  03,3D
+181E:  MOVFF  02,3C
+1822:  MOVFF  01,3B
+1826:  MOVFF  00,3A
+182A:  CLRF   41
+182C:  CLRF   40
+182E:  CLRF   3F
+1830:  MOVLW  82
+1832:  MOVWF  3E
+1834:  RCALL  12EC
+1836:  BSF    FD8.1
+1838:  CLRF   39
+183A:  SETF   38
+183C:  MOVLW  7F
+183E:  MOVWF  37
+1840:  MOVLW  8E
+1842:  MOVWF  36
+1844:  MOVFF  03,3D
+1848:  MOVFF  02,3C
+184C:  MOVFF  01,3B
+1850:  MOVFF  00,3A
+1854:  RCALL  1446
+1856:  MOVFF  03,39
+185A:  MOVFF  02,38
+185E:  MOVFF  01,37
+1862:  MOVFF  00,36
+1866:  RCALL  16B0
+1868:  MOVFF  02,35
+186C:  MOVFF  01,34
+....................    __servoSignal[1] = starting_point;
+1870:  MOVFF  33,1E
+1874:  MOVFF  32,1D
+....................    __servoSignal[2] = complement;
+1878:  MOVFF  35,20
+187C:  MOVFF  34,1F
+1880:  GOTO   18DA (RETURN)
+.................... }
+.................... 
+.................... /**
+....................  * @brief Sets the servo angle.
+....................  * 
+....................  * @param angle in degrees
+....................  *
+....................  * @description This function calculates the time in seconds that turn the
+....................  *              servo to the input angle
+....................  */
+.................... void set_servo_angle ( int angle ) {
+....................    if( angle > 180 )
+1884:  MOVF   29,W
+1886:  SUBLW  B4
+1888:  BC    188E
+....................       angle = 180;
+188A:  MOVLW  B4
+188C:  MOVWF  29
+....................    float __t = (SERVO_DUTY_CYCLE_POS/180.0) * (float)angle;
+188E:  CLRF   2F
+1890:  MOVFF  29,2E
+1894:  BRA    114C
+1896:  MOVLW  24
+1898:  MOVWF  39
+189A:  MOVLW  60
+189C:  MOVWF  38
+189E:  MOVLW  56
+18A0:  MOVWF  37
+18A2:  MOVLW  6E
+18A4:  MOVWF  36
+18A6:  MOVFF  03,3D
+18AA:  MOVFF  02,3C
+18AE:  MOVFF  01,3B
+18B2:  MOVFF  00,3A
+18B6:  RCALL  1184
+18B8:  MOVFF  03,2D
+18BC:  MOVFF  02,2C
+18C0:  MOVFF  01,2B
+18C4:  MOVFF  00,2A
+....................    set_servo_ms( __t );
+18C8:  MOVFF  2D,31
+18CC:  MOVFF  2C,30
+18D0:  MOVFF  2B,2F
+18D4:  MOVFF  2A,2E
+18D8:  BRA    16E8
+18DA:  RETURN 0
+.................... }
+.................... 
+.................... #endif // _SERVO_H_
+.................... 
 .................... #use delay(internal=48MHz)               // Tipo de oscilador y frecuencia dependiendo del microcontrolador 
 *
-20D4:  MOVLW  01
-20D6:  SUBWF  1E,F
-20D8:  BNC   20F2
-20DA:  CLRF   FEA
-20DC:  MOVLW  1E
-20DE:  MOVWF  FE9
-20E0:  MOVF   FEF,W
-20E2:  BZ    20F2
-20E4:  MOVLW  02
-20E6:  MOVWF  00
-20E8:  DECFSZ 00,F
-20EA:  BRA    20E8
-20EC:  BRA    20EE
-20EE:  DECFSZ FEF,F
-20F0:  BRA    20E4
-20F2:  RETURN 0
-20F4:  CLRF   FEA
-20F6:  MOVLW  1D
-20F8:  MOVWF  FE9
-20FA:  MOVF   FEF,W
-20FC:  BZ    211A
-20FE:  MOVLW  0F
-2100:  MOVWF  01
-2102:  CLRF   00
-2104:  DECFSZ 00,F
-2106:  BRA    2104
-2108:  DECFSZ 01,F
-210A:  BRA    2102
-210C:  MOVLW  8F
-210E:  MOVWF  00
-2110:  DECFSZ 00,F
-2112:  BRA    2110
-2114:  NOP   
-2116:  DECFSZ FEF,F
-2118:  BRA    20FE
-211A:  RETURN 0
+1124:  CLRF   FEA
+1126:  MOVLW  2A
+1128:  MOVWF  FE9
+112A:  MOVF   FEF,W
+112C:  BZ    114A
+112E:  MOVLW  0F
+1130:  MOVWF  01
+1132:  CLRF   00
+1134:  DECFSZ 00,F
+1136:  BRA    1134
+1138:  DECFSZ 01,F
+113A:  BRA    1132
+113C:  MOVLW  8F
+113E:  MOVWF  00
+1140:  DECFSZ 00,F
+1142:  BRA    1140
+1144:  NOP   
+1146:  DECFSZ FEF,F
+1148:  BRA    112E
+114A:  RETURN 0
 .................... #build(reset=0x02000,interrupt=0x02008)  // Asigna los vectores de reset e interrupción para la versión con bootloader
-.................... #org 0x0000,0x1FFF {}                    // Reserva espacio en memoria para el bootloader
+.................... #org 0x0000,0x0FFF {}                    // Reserva espacio en memoria para el bootloader
 .................... 
-.................... int16 DUTY;                              //variable para ajustar el valor del PWM
-.................... int1 SUBE;
-.................... int i;
-.................... 
-.................... void SisInit()
-.................... {
-....................   set_tris_c(0xFB);                      // C2 salida
+.................... void main( void ) {
 *
-20C2:  MOVLW  FB
-20C4:  MOVWF  F94
-....................   setup_timer_0(T0_INTERNAL|T0_DIV_4);
-20C6:  MOVLW  81
-20C8:  MOVWF  FD5
-....................   enable_interrupts(INT_TIMER0);
-20CA:  BSF    FF2.5
-....................   enable_interrupts(GLOBAL);
-20CC:  MOVLW  C0
-20CE:  IORWF  FF2,F
-20D0:  GOTO   2140 (RETURN)
+18DC:  CLRF   FF8
+18DE:  BCF    FD0.7
+18E0:  BSF    07.7
+18E2:  CLRF   1A
+18E4:  SETF   28
+18E6:  SETF   27
+18E8:  MOVLW  70
+18EA:  MOVWF  FD3
+18EC:  CLRF   FD2
+18EE:  CLRF   F9B
+18F0:  MOVLB  F
+18F2:  CLRF   x5B
+18F4:  CLRF   x5C
+18F6:  CLRF   x5D
+18F8:  CLRF   x5E
+18FA:  CLRF   x5F
+18FC:  CLRF   F9A
+18FE:  CLRF   F99
+1900:  CLRF   F98
+1902:  MOVLW  9F
+1904:  MOVWF  1B
+1906:  MOVLW  F6
+1908:  MOVWF  1C
+190A:  SETF   1D
+190C:  SETF   1E
+190E:  MOVLW  17
+1910:  MOVWF  1F
+1912:  MOVLW  CA
+1914:  MOVWF  20
+1916:  MOVLW  3F
+1918:  MOVWF  21
+191A:  MOVLW  2B
+191C:  MOVWF  22
+191E:  MOVLW  01
+1920:  MOVWF  23
+1922:  MOVWF  24
+1924:  CLRF   25
+1926:  CLRF   26
+....................    set_tris_c( 0xFB );                      // Configura C2 como salida
+1928:  MOVLW  FB
+192A:  MOVWF  F94
+....................    setup_servo( PIN_C2 );                   // Configura el PIN C2 como el servo
+192C:  MOVLW  7C
+192E:  MOVWF  2A
+1930:  MOVLW  12
+1932:  MOVWF  29
+1934:  MOVLB  0
+1936:  GOTO   10CA
 .................... 
+....................    while ( 1 ) {
+....................       delay_ms( 1000 );
+193A:  MOVLW  04
+193C:  MOVWF  29
+193E:  MOVLW  FA
+1940:  MOVWF  2A
+1942:  CALL   1124
+1946:  DECFSZ 29,F
+1948:  BRA    193E
+....................       set_servo_angle (0);                  // Configura la posición del servo
+194A:  CLRF   29
+194C:  RCALL  1884
+....................       delay_ms( 1000 );
+194E:  MOVLW  04
+1950:  MOVWF  29
+1952:  MOVLW  FA
+1954:  MOVWF  2A
+1956:  CALL   1124
+195A:  DECFSZ 29,F
+195C:  BRA    1952
+....................       set_servo_angle (45);
+195E:  MOVLW  2D
+1960:  MOVWF  29
+1962:  RCALL  1884
+....................       delay_ms( 1000 );
+1964:  MOVLW  04
+1966:  MOVWF  29
+1968:  MOVLW  FA
+196A:  MOVWF  2A
+196C:  CALL   1124
+1970:  DECFSZ 29,F
+1972:  BRA    1968
+....................       set_servo_angle (90);
+1974:  MOVLW  5A
+1976:  MOVWF  29
+1978:  RCALL  1884
+....................       delay_ms( 1000 );
+197A:  MOVLW  04
+197C:  MOVWF  29
+197E:  MOVLW  FA
+1980:  MOVWF  2A
+1982:  CALL   1124
+1986:  DECFSZ 29,F
+1988:  BRA    197E
+....................       set_servo_angle (135);
+198A:  MOVLW  87
+198C:  MOVWF  29
+198E:  RCALL  1884
+....................       delay_ms( 1000 );
+1990:  MOVLW  04
+1992:  MOVWF  29
+1994:  MOVLW  FA
+1996:  MOVWF  2A
+1998:  CALL   1124
+199C:  DECFSZ 29,F
+199E:  BRA    1994
+....................       set_servo_angle (180);
+19A0:  MOVLW  B4
+19A2:  MOVWF  29
+19A4:  RCALL  1884
+19A6:  BRA    193A
+....................    }
 .................... }
-.................... 
-.................... #int_TIMER0
-.................... 
-....................  
-.................... void TIMER0_isr(){
-.................... output_high(PIN_C2);                    //Salida Pin_C2
-*
-20AE:  BCF    F94.2
-20B0:  BSF    F8B.2
-.................... SUBE=1;
-20B2:  BSF    1B.0
-.................... set_timer0(5780);                      
-20B4:  MOVLW  16
-20B6:  MOVWF  FD7
-20B8:  MOVLW  94
-20BA:  MOVWF  FD6
-20BC:  BCF    FF2.2
-20BE:  GOTO   2060
-.................... }
-.................... 
-.................... void main()
-*
-211C:  CLRF   FF8
-211E:  BCF    FD0.7
-2120:  BSF    07.7
-2122:  MOVLW  70
-2124:  MOVWF  FD3
-2126:  CLRF   FD2
-2128:  CLRF   F9B
-212A:  MOVLB  F
-212C:  CLRF   x5B
-212E:  CLRF   x5C
-2130:  CLRF   x5D
-2132:  CLRF   x5E
-2134:  CLRF   x5F
-2136:  CLRF   F9A
-2138:  CLRF   F99
-213A:  CLRF   F98
-.................... {
-....................         SisInit();
-213C:  MOVLB  0
-213E:  BRA    20C2
-....................         while(1)
-....................               {
-.................... 
-....................                     for(i=0;i<255;i++)
-2140:  CLRF   1C
-2142:  INCFSZ 1C,W
-2144:  BRA    2148
-2146:  BRA    2168
-....................                          {
-....................                              if(SUBE==1)
-2148:  BTFSS  1B.0
-214A:  BRA    2160
-....................                              {
-....................                                 delay_us(500);        //0°
-214C:  MOVLW  02
-214E:  MOVWF  1D
-2150:  MOVLW  FA
-2152:  MOVWF  1E
-2154:  RCALL  20D4
-2156:  DECFSZ 1D,F
-2158:  BRA    2150
-....................                                  output_low( PIN_C2);
-215A:  BCF    F94.2
-215C:  BCF    F8B.2
-....................                                  SUBE=0;
-215E:  BCF    1B.0
-....................                               }
-....................                                 while(SUBE==0);
-2160:  BTFSS  1B.0
-2162:  BRA    2160
-2164:  INCF   1C,F
-2166:  BRA    2142
-....................                             }
-.................... 
-....................                       for(i=0;i<255;i++)
-2168:  CLRF   1C
-216A:  INCFSZ 1C,W
-216C:  BRA    2170
-216E:  BRA    2196
-....................                            {
-....................                               if(SUBE==1)
-2170:  BTFSS  1B.0
-2172:  BRA    218E
-....................                                {
-....................                                   delay_us(1500);     //90°
-2174:  MOVLW  01
-2176:  MOVWF  1D
-2178:  RCALL  20F4
-217A:  MOVLW  02
-217C:  MOVWF  1D
-217E:  MOVLW  FA
-2180:  MOVWF  1E
-2182:  RCALL  20D4
-2184:  DECFSZ 1D,F
-2186:  BRA    217E
-....................                                    output_low( PIN_C2);
-2188:  BCF    F94.2
-218A:  BCF    F8B.2
-....................                                    SUBE=0;
-218C:  BCF    1B.0
-....................                                 }
-....................                                 while(SUBE==0);
-218E:  BTFSS  1B.0
-2190:  BRA    218E
-2192:  INCF   1C,F
-2194:  BRA    216A
-....................                           } 
-.................... 
-....................                         for(i=0;i<255;i++)
-2196:  CLRF   1C
-2198:  INCFSZ 1C,W
-219A:  BRA    219E
-219C:  BRA    21C4
-....................                                {
-....................                                   if(SUBE==1)
-219E:  BTFSS  1B.0
-21A0:  BRA    21BC
-....................                                   {
-....................                                       delay_us(2500); //180°
-21A2:  MOVLW  02
-21A4:  MOVWF  1D
-21A6:  RCALL  20F4
-21A8:  MOVLW  02
-21AA:  MOVWF  1D
-21AC:  MOVLW  FA
-21AE:  MOVWF  1E
-21B0:  RCALL  20D4
-21B2:  DECFSZ 1D,F
-21B4:  BRA    21AC
-....................                                       output_low( PIN_C2);
-21B6:  BCF    F94.2
-21B8:  BCF    F8B.2
-....................                                        SUBE=0;
-21BA:  BCF    1B.0
-....................                                    }
-....................                                   while(SUBE==0);
-21BC:  BTFSS  1B.0
-21BE:  BRA    21BC
-21C0:  INCF   1C,F
-21C2:  BRA    2198
-....................                                     }
-21C4:  BRA    2140
-.................... 
-....................                  }
-.................... }
-21C6:  SLEEP 
+19A8:  SLEEP 
 
 Configuration Fuses:
    Word  1: C823   PLL3X PLLEN NOCPUDIV LS48MHZ INTRC_IO PRIMARY_SW FCMEN IESO

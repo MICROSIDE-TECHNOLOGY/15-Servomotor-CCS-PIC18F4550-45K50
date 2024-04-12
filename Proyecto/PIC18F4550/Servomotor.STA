@@ -1,50 +1,59 @@
 
-ROM used:   436/32768 (1%)
-            440/32768 (1%) including unused fragments
+ROM used:   2622/32768 (8%)
+            2626/32768 (8%) including unused fragments
 
-            0.5 Average locations per line
-            11.8 Average locations per statement
+            2.4 Average locations per line
+            64.0 Average locations per statement
 
-RAM used:   30/2048 (1%) at main() level
-            31/2048 (2%) worst case
+RAM used:   42/2048 (2%) at main() level
+            76/2048 (4%) worst case
 
-Stack used: 1 worst case (0 in main + 1 for interrupts)
+Stack used: 4 worst case (2 in main + 2 for interrupts)
 Stack size: 31
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-   81    37 100  Servomotor.c
-  861     0   0  D:\Programas\PICC\Devices\18F4550.h
+   40    14  34  Servomotor.c
+  877     0   0  ..\..\..\..\..\..\..\..\..\..\Program Files (x86)\PICCDEMO\Devices\18F4550.h
+  165    27  66  Servo.h
 ----- -----
-  942    37 Total
+ 1082    41 Total
 
 Page ROM  %  RAM    Vol Diff  Functions:
 ---- --- --- ---    --- ----  ----------
-0     40   5    1             @delay_ms1
-0     32   4    1             @delay_us1
-0     18   2    0     78  1.6  SisInit
-0     20   2    0     50  1.5  TIMER0_isr
-0    156  18    1    706  4.8  MAIN
+0    136   3    2    232  5.0  TIMER1_isr
+0     62   1    6             @WRITEBITA
+0     88   2    2    156  2.2  setup_servo
+0    412   8   12    491  5.9  set_servo_ms
+0    118   2   10             @FLT
+0    242   5   11             @MULFF
+0    346   7   14             @DIVFF
+0    618  12   16             @ADDFF
+0     56   1    4             @SFTOI
+0     88   2    5    173  4.0  set_servo_angle
+0     56   1    2             @ITOF
+0     40   1    1             @delay_ms1
+0    190   4    1    275  1.9  MAIN
  Inline         0             @cinit1
 
 Program metrics:
-    Functions               3
-    Statements              37
-    Comments                180
-    Volume (V)              997
-    Difficulty (D)          7.9
-    Effort to implement (E) 7838
-    Time to implement (T)   7 minutes
+    Functions               5
+    Statements              41
+    Comments                276
+    Volume (V)              1928
+    Difficulty (D)          17.9
+    Effort to implement (E) 34526
+    Time to implement (T)   32 minutes
     Est Delivered Bugs (B)  0
-    Cyclomatic Complexity   6
-    Maintainability (MI)    73
+    Cyclomatic Complexity   5
+    Maintainability (MI)    62
 
  Segment     Used  Free
 -----------  ----  ----
 00000-01FFE     0  8192  
 02000-02006     4  4  
 02008-020AC   166  0  
-020AE-07FFE   266  24136  
+020AE-07FFE  2452  21950  
 
 
 
